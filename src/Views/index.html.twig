@@ -1,0 +1,101 @@
+{% extends 'layout.html.twig' %}
+{% block stylesheets %}
+{% endblock %}
+{% block title %}Главная{% endblock %}
+{% block content %}
+    <div>
+        {% if new > 0 %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                Новое задание создано
+                <button id="close-alert" type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endif %}
+        {% if todos %}
+            <table id="payments" class="table table-bordered table-hover">
+                <thead class="thead-dark">
+                <tr>
+                    <th>
+                        <a href="?page={{ page }}&sort=name&type={% if typeofsort == 'ASC' %}DESC{% else %}ASC{% endif %}">Имя
+                            пользоватлея <i class="fa fa-sort" aria-hidden="true"></i></a></th>
+                    <th>
+                        <a href="?page={{ page }}&sort=email&type={% if typeofsort == 'ASC' %}DESC{% else %}ASC{% endif %}">E-mail
+                            <i class="fa fa-sort" aria-hidden="true"></i></a></th>
+                    <th>Текст <i class="fa fa-sort" aria-hidden="true"></i></th>
+                    <th>
+                        <a href="?page={{ page }}&sort=done&type={% if typeofsort == 'ASC' %}DESC{% else %}ASC{% endif %}">Статус
+                            <i class="fa fa-sort" aria-hidden="true"></i></a></th>
+                    <th>Операции</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for todo in todos %}
+                    <tr>
+                        <td>{{ todo.name }}</td>
+                        <td>{{ todo.email }}</td>
+                        <td>{{ todo.text }}</td>
+                        <td>
+                            {% if todo.done %}
+                                <p class="text-danger">Статус: выполнено</p>
+                            {% else %}
+                                <p class="text-primary">Статус: не выполнено</p>
+                            {% endif %}
+                            {% if user %}
+                                {% if todo.changed == 1 %}
+                                    <p class="text-danger">Изменено администратором</p>
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if user %}
+                                <a href="todo/update/{{ todo.id }}" class="btn btn-dark">
+                                    Изменить
+                                </a>
+                            {% else %}
+                                {% if todo.done %}
+                                    <a href="{{ baseroute }}todo/done/{{ todo.id }}/0" class="btn btn-dark done">
+                                        Отменить выполнение
+                                    </a>
+                                {% else %}
+                                    <a href="{{ baseroute }}todo/done/{{ todo.id }}/1" class="btn btn-dark done">
+                                        Выполнить
+                                    </a>
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <ul class="pagination">
+                {% for i in range(1,  pages ) %}
+                    <li class="page-item {% if page == i %} active {% endif %}">
+                        <a class="page-link " href="?page={{ i }}&{{ sortquery }}">{{ i }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Нет задач</p>
+        {% endif %}
+    </div>
+    {% include('createtodo.html.twig') %}
+{% endblock %}
+{% block javascripts %}
+    <script>
+        const closeAlertButton = document.getElementById('close-alert');
+        closeAlertButton.addEventListener('click', ev => {
+            window.location.href = window.location.href.replace('&new=1', '')
+        });
+        const doneButtons = document.getElementsByClassName('done');
+        for (let i = 0; i < doneButtons.length; i++) {
+            doneButtons.item(i).addEventListener('click', ev => {
+                ev.preventDefault();
+                fetch(ev.target.href, {
+                    method: 'GET'
+                }).then(() => window.location.reload());
+            });
+        }
+
+    </script>
+{% endblock %}

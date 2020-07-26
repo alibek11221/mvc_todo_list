@@ -1,0 +1,39 @@
+{% extends 'layout.html.twig' %}
+{% block title %}Авторизация{% endblock %}
+{% block content %}
+    {% if error %}
+        <h4 class="text-danger">{{ error }}</h4>
+    {% endif %}
+    <form method="post" id="form" action="login" novalidate>
+        <div class="form-group ">
+            <label for="name">Имя пользователя</label>
+            <input name="username" type="text" class="form-control" id="name" required>
+            <div class="invalid-feedback">
+                введите имя пользователя
+            </div>
+        </div>
+        <div class="form-group ">
+            <label for="pwd">Пароль</label>
+            <input name="password" type="password" class="form-control" id="pwd" required>
+            <div class="invalid-feedback">
+                введите пароль
+            </div>
+        </div>
+        <button type="submit" class="mt-2 btn btn-primary">Войти</button>
+    </form>
+
+{% endblock %}
+{% block javascripts %}
+    <script>
+        (function () {
+            const form = document.getElementById('form');
+            form.addEventListener('submit', function (event) {
+                if (form.checkValidity() === false) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        })();
+    </script>
+{% endblock %}

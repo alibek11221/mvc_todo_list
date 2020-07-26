@@ -1,0 +1,16 @@
+{
+  "require": {
+    "twig/twig": "^3.0",
+    "ext-pdo": "*",
+    "ext-json": "*",
+    "pecee/simple-router": "4.2.0.6",
+    "php-di/php-di": "^6.2",
+    "doctrine/annotations": "^1.10",
+    "vlucas/phpdotenv": "^5.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "src"
+    }
+  }
+}

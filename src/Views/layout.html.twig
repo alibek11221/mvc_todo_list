@@ -1,0 +1,43 @@
+<html lang="ru">
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script src="https://use.fontawesome.com/c1b26e60b4.js"></script>
+    {% block stylesheets %}{% endblock %}
+</head>
+<body class="container-fluid">
+{% block header %}
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark  bg-primary mb-3">
+            <a href="{{ baseroute }}?page=1" class="navbar-brand col-3">MVC Задачник</a>
+            {% if user %}
+                <div class="col-6"></div>
+                <div class="col-3 row">
+                    <div class="col-6 d-flex justify-content-center align-items-center text-light text-uppercase ">
+                        {{ user.name }}
+                    </div>
+                    <a href="logout" class="btn btn-outline-danger my-2 my-sm-0">Выйти</a>
+                </div>
+            {% else %}
+                <div class="col-lg-8 col-sm-6"></div>
+                <a class="btn btn-link text-light text-capitalize btn-outline-light " href="login">Войти</a>
+            {% endif %}
+        </nav>
+    </header> {% endblock %}
+
+<main>
+    {% block content %}{% endblock %}
+</main>
+{% block javascripts %}{% endblock %}
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
+</body>
+</html>
