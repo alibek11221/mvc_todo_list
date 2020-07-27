@@ -79,23 +79,60 @@
             <p>Нет задач</p>
         {% endif %}
     </div>
-    {% include('createtodo.html.twig') %}
+    <form id="form" class="d-flex flex-column" action="{{ baseroute }}todo/create" method="post" novalidate>
+        <div class="form-group ">
+            <label for="username">Имя пользователя</label>
+            <input name="username" type="text" class="form-control" id="username" required>
+            <div class="invalid-feedback">
+                Имя пользователя не может быть пустым
+            </div>
+        </div>
+        <div class="form-group ">
+            <label for="email">email</label>
+            <input name="email" type="email"
+                   pattern="^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$"
+                   class="form-control" id="email" required>
+            <div class="invalid-feedback">
+                введите достоверный email адрес
+            </div>
+        </div>
+        <div class="form-group ">
+            <label for="text">текст</label>
+            <textarea class="form-control" name="text" id="text" rows="5" required></textarea>
+        </div>
+        <div class="form-check mb-2">
+            <input type="checkbox" class="form-check-input" id="done" name="done">
+            <label class="form-check-label text-uppercase " for="done">Выполнено</label>
+        </div>
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+    </form>
 {% endblock %}
 {% block javascripts %}
     <script>
-        const closeAlertButton = document.getElementById('close-alert');
-        closeAlertButton.addEventListener('click', ev => {
-            window.location.href = window.location.href.replace('&new=1', '')
-        });
-        const doneButtons = document.getElementsByClassName('done');
-        for (let i = 0; i < doneButtons.length; i++) {
-            doneButtons.item(i).addEventListener('click', ev => {
-                ev.preventDefault();
-                fetch(ev.target.href, {
-                    method: 'GET'
-                }).then(() => window.location.reload());
-            });
-        }
-
+        (function () {
+            const closeAlertButton = document.getElementById('close-alert');
+            if (closeAlertButton) {
+                closeAlertButton.addEventListener('click', ev => {
+                    window.location.href = window.location.href.replace('&new=1', '')
+                });
+            }
+            const doneButtons = document.getElementsByClassName('done');
+            for (let i = 0; i < doneButtons.length; i++) {
+                doneButtons.item(i).addEventListener('click', ev => {
+                    ev.preventDefault();
+                    fetch(ev.target.href, {
+                        method: 'GET'
+                    }).then(() => window.location.reload());
+                });
+            }
+            const form = document.getElementById('form');
+            form.addEventListener('submit', function (event) {
+                if (form.checkValidity() === false) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        })();
     </script>
 {% endblock %}
