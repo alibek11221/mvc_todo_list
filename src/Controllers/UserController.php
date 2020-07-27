@@ -26,10 +26,7 @@ class UserController extends AbstractController
             $user = $this->userModel->getByUserNameAndPassword($userName, $password);
             if ($user !== null) {
                 $_SESSION['user'] = $user;
-
                 SimpleRouter::response()->redirect($this->baseRoute.'?page=1');
-
-                return SimpleRouter::response();
             }
 
             return $this->render('login.html.twig', ['error' => 'Введены неверные данные']);
@@ -38,16 +35,11 @@ class UserController extends AbstractController
         return $this->render('login.html.twig', []);
     }
 
-    /**
-     * @return Response
-     */
-    public function logout(): Response
+    public function logout(): void
     {
         if (isset($_SESSION['user'])) {
             unset($_SESSION['user']);
         }
         SimpleRouter::response()->redirect($this->baseRoute.'?page=1');
-
-        return SimpleRouter::response();
     }
 }

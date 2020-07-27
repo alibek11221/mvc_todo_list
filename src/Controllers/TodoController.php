@@ -14,7 +14,7 @@ class TodoController extends AbstractController
      */
     private $todoModel;
 
-    public function create()
+    public function create(): void
     {
         $requestParams = $this->getRequestValues();
 
@@ -25,8 +25,6 @@ class TodoController extends AbstractController
             $requestParams['done']
         );
         SimpleRouter::response()->redirect($this->baseRoute.'?page=1&new=1');
-
-        return SimpleRouter::response();
     }
 
     private function getRequestValues(): array
@@ -39,7 +37,7 @@ class TodoController extends AbstractController
         return $output;
     }
 
-    public function update(int $id)
+    public function update(int $id): string
     {
         if ((SimpleRouter::request()->getMethod() === "post")) {
             $requestParams = $this->getRequestValues();
@@ -51,8 +49,6 @@ class TodoController extends AbstractController
                 $requestParams['done']
             );
             SimpleRouter::response()->redirect($this->baseRoute.'?page=1');
-
-            return SimpleRouter::response();
         }
         $params['todo'] = $this->todoModel->get($id);
 
