@@ -32,7 +32,7 @@ class TodoController extends AbstractController
         $output['userName'] = $this->inputHandler->post('username')->getValue();
         $output['email'] = $this->inputHandler->post('email')->getValue();
         $output['text'] = $this->inputHandler->post('text')->getValue();
-        $output['done'] = $this->inputHandler->post('done') == 'on' ? 1 : 0;
+        $output['done'] = $this->inputHandler->post('done') === 'on' ? 1 : 0;
 
         return $output;
     }

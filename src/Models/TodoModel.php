@@ -6,6 +6,9 @@ use PDO;
 
 class TodoModel extends AbstractModel
 {
+    public const COLUMNS = ['name', 'email', 'done'];
+    public const ORDER_TYPES = ['ASC', 'DESC'];
+
     /**
      * @param int $id
      *
@@ -60,7 +63,9 @@ class TodoModel extends AbstractModel
     {
         $start = $pageLength * ($page - 1);
         $query = 'SELECT * FROM todos';
-        $query .= $this->getSortingQuery($sort, $type);
+        if (in_array($sort, self::COLUMNS) && in_array($type, self::ORDER_TYPES)) {
+            $query .= sprintf(' ORDER BY %s %s', $sort, $type);
+        }
         $query .= ' LIMIT :page, :length';
         $stmt = $this->db->prepare($query);
         $stmt->bindParam('page', $start, PDO::PARAM_INT);
@@ -68,21 +73,6 @@ class TodoModel extends AbstractModel
         $stmt->execute();
 
         return $stmt->fetchAll();
-    }
-
-    /**
-     * @param string $sort
-     * @param string $type
-     *
-     * @return string
-     */
-    public function getSortingQuery(string $sort, string $type): string
-    {
-        if (!empty($sort) && !empty($type)) {
-            return sprintf(' ORDER BY %s %s', $sort, $type);
-        }
-
-        return '';
     }
 
     /**
